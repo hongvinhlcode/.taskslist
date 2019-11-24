@@ -67,7 +67,7 @@
                 android:layout_marginLeft="5dp"
                 android:textColor="?attr/textcolor"
                 android:textSize="20sp"
-                android:text="Notifycation"
+                android:text="Notification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

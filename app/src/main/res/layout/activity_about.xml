@@ -20,9 +20,10 @@
                 android:layout_centerInParent="true"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@drawable/icon_list_v2" />
+                android:src="@drawable/icon_v5" />
         </RelativeLayout>
         <RelativeLayout
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
@@ -34,7 +35,7 @@
                     android:layout_centerInParent="true"
                     android:id="@+id/txtApp"
                     android:textColor="?attr/textcolor"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_marginTop="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -42,7 +43,6 @@
             </RelativeLayout>
             <RelativeLayout
                 android:layout_below="@+id/relativeLayout"
-                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -51,10 +51,10 @@
                     android:layout_centerInParent="true"
                     android:textColor="?attr/textcolor"
                     android:textStyle="italic"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Version: 1.0.0   "/>
+                    android:text="Version: 1.1.5   "/>
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>

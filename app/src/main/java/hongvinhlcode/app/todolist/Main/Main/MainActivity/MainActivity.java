@@ -4,18 +4,24 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 
 import hongvinhlcode.app.todolist.Main.Main.About.AboutActivity;
@@ -44,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     Database database;
 
     String title, des, remind;
-    ArrayList<String> checkNotify;
+
 
 
     @Override
@@ -70,21 +77,16 @@ public class MainActivity extends AppCompatActivity {
                 "des VARCHAR(200),remind VARCHAR(200))");
         AddToDo();
 
+        final Animation animButtonAdd= AnimationUtils.loadAnimation(this,R.anim.anim_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                v.startAnimation(animButtonAdd);
                 startActivity(new Intent(MainActivity.this, CreateActivity.class));
+                overridePendingTransition(R.anim.anim_enter_create,R.anim.anim_exit_create);
             }
         });
         AddDatabase();
-        try{
-            Notify();
-        }catch (Exception e){
-
-        }
-
     }
 
     @Override
@@ -98,9 +100,11 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_setting:
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                overridePendingTransition(R.anim.anim_enter_create,R.anim.anim_exit_create);
                 break;
             case R.id.menu_about:
                 startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                overridePendingTransition(R.anim.anim_enter_create,R.anim.anim_exit_create);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -150,44 +154,5 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.show();
     }
-
-    private void Notify() {
-        Calendar cDate = Calendar.getInstance();
-        int yearC = cDate.get(Calendar.YEAR);
-        int monthC = cDate.get(Calendar.MONTH);
-        int dateC = cDate.get(Calendar.DAY_OF_MONTH);
-        cDate.set(yearC, monthC, dateC);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String dateNow = simpleDateFormat.format(cDate.getTime());
-
-        Calendar cTime = Calendar.getInstance();
-        int hourC = cDate.get(Calendar.HOUR_OF_DAY);
-        int minuteC = cDate.get(Calendar.MINUTE);
-        cDate.set(0,0,0,hourC,minuteC);
-        SimpleDateFormat simpleTime = new SimpleDateFormat("HH:mm");
-        String timeNow = simpleTime.format(cTime.getTime());
-        String remindNow = "Remind me" + " at " + timeNow + " (" + dateNow + ")";
-        Cursor dataToDo = database.GetData("SELECT * FROM ToDo3");
-        checkNotify.clear();
-        while (dataToDo.moveToNext()) {
-            String titleNotify = dataToDo.getString(1);
-            String remind = dataToDo.getString(3);
-            if (remind == remindNow){
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this)
-                        .setContentTitle("Hey bro, you have a tasks now!")
-                        .setSmallIcon(R.drawable.icon_list_v2)
-                        .setContentTitle(titleNotify)
-                        .setAutoCancel(true);
-
-                Intent intent=new Intent(MainActivity.this,MainActivity.class);
-                PendingIntent pendingIntent=PendingIntent.getActivity(MainActivity.this,
-                        0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                builder.setContentIntent(pendingIntent);
-
-                NotificationManager notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(0,builder.build());
-
-            }
-        }
-    }
 }
+
